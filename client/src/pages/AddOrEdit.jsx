@@ -32,11 +32,16 @@ const AddOrEdit = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    axios.get(`http://localhost:3001/api/v3/app/events/${id}`).then((res) => {
-      setState({
-        ...res.data[0],
-      });
-    });
+    if (id !== undefined) {
+      axios
+        .get(`http://localhost:3001/api/v3/app/events/${id}`)
+        .then((res) => {
+          setState(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }, [id]);
 
   const handleSubmit = (e) => {
@@ -67,7 +72,7 @@ const AddOrEdit = () => {
 
       if (id !== undefined) {
         axios
-          .put(`http://localhost:3001/api/v3/app/events/${id}`, formData, {
+          .patch(`http://localhost:3001/api/v3/app/events/${id}`, formData, {
             headers: {
               "Content-Type": "multipart/form-data",
             },
